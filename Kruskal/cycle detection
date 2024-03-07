@@ -1,0 +1,77 @@
+#include <iostream>
+
+using namespace std;
+
+int* parent;
+int* ranks;  
+
+int find(int x) {
+    if (parent[x] != x) {
+        parent[x] = find(parent[x]);
+    }
+    return parent[x];
+}
+
+void unionSets(int x, int y, int* Ranks) {
+    int rootX = find(x);
+    int rootY = find(y);
+
+    if (Ranks[rootX] < Ranks[rootY]) {
+        parent[rootX] = rootY;
+    } else if (Ranks[rootX] > Ranks[rootY]) {
+        parent[rootY] = rootX;
+    } else {
+        parent[rootX] = rootY;
+        Ranks[rootY]++;
+    }
+}
+
+bool hasCycle(int* edges, int m, int* Ranks) {  
+    for (int i = 0; i < m; ++i) {
+        int u = edges[i * 2];
+        int v = edges[i * 2 + 1];
+
+        int setU = find(u);
+        int setV = find(v);
+
+        if (setU == setV) {
+            return true;
+        }
+
+        unionSets(setU, setV, Ranks);
+    }
+
+    return false;
+}
+
+int main() {
+    int n, m; 
+    cout << "Enter the number of vertices and edges: ";
+    cin >> n >> m;
+
+    parent = new int[n];
+    ranks = new int[n];  
+
+    for (int i = 0; i < n; ++i) {
+        parent[i] = i;
+        ranks[i] = 0;  
+    }
+
+    int* edges = new int[m * 2];
+    cout << "Enter the edges (u v):" << endl;
+    for (int i = 0; i < m; ++i) {
+        cin >> edges[i * 2] >> edges[i * 2 + 1];
+    }
+
+    if (hasCycle(edges, m, ranks)) {  
+        cout << "The graph contains a cycle." << endl;
+    } else {
+        cout << "The graph does not contain a cycle." << endl;
+    }
+
+    delete[] parent;
+    delete[] ranks;  
+    delete[] edges;
+
+    return 0;
+}
