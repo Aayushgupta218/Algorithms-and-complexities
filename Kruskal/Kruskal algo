@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Edge {
+    int src, dest, weight;
+};
+
+bool compareEdges(const Edge& a, const Edge& b) {
+    return a.weight < b.weight;
+}
+
+int findParent(int v, vector<int>& parent) {
+    if (parent[v] == -1)
+        return v;
+    return findParent(parent[v], parent);
+}
+
+void unionSets(int x, int y, vector<int>& parent) {
+    int xSet = findParent(x, parent);
+    int ySet = findParent(y, parent);
+    parent[xSet] = ySet;
+}
+
+void MST_Kruskal(int n, vector<Edge>& edges) {
+    vector<Edge> result;
+    vector<int> parent(n, -1);
+
+    sort(edges.begin(), edges.end(), compareEdges);
+
+    for (const Edge& edge : edges) {
+        int x = findParent(edge.src, parent);
+        int y = findParent(edge.dest, parent);
+
+        if (x != y) {
+            result.push_back(edge);
+            unionSets(x, y, parent);
+        }
+    }
+
+    cout << "Edges of Minimum Spanning Tree using Kruskal's algorithm:\n";
+    for (const Edge& edge : result) {
+        cout << "Edge: " << edge.src << " - " << edge.dest << "   Weight: " << edge.weight << "\n";
+    }
+}
+
+int main() {
+    int n = 6;
+    vector<Edge> edges = {
+        {0, 1, 2}, {0, 2, 4}, {1, 2, 1}, {1, 3, 7}, {2, 4, 3}, {3, 5, 1}, {4, 3, 2}, {4, 5, 5}
+    };
+
+    MST_Kruskal(n, edges);
+
+    return 0;
+}
