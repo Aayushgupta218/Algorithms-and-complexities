@@ -1,0 +1,54 @@
+#include<iostream>
+#include<chrono>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+using namespace std::chrono;
+
+int *generate_number(int arr[], int g) {
+    for (int j = 0; j < g; j++) {
+        arr[j] = rand();
+    }
+    sort(arr, arr + g);  // Sorting the array for binary search
+    return arr;
+}
+
+void binary_search(int arr[], int low, int high, int target) {
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (arr[mid] == target) {
+          
+            break;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+}
+
+int main() {
+    for (int i = 1000; i <= 5000; i += 200) {
+        int *arr = new int[i];
+        arr = generate_number(arr, i);
+
+        int target = arr[rand() % i];  
+
+        auto start = high_resolution_clock::now();
+
+        for (int m = 1; m <= 10; m++) {
+            binary_search(arr, 0, i - 1, target);
+        }
+
+        auto stop = high_resolution_clock::now();
+
+        auto duration = (duration_cast<nanoseconds>(stop - start)) / 10;
+
+        cout << "(" << i << "," << "\t" << duration.count() << ")," << endl;
+
+        delete[] arr;
+    }
+
+    return 0;
+};
