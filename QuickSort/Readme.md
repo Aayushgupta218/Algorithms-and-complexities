@@ -8,6 +8,8 @@ TIME COMPLEXITY(average case) = O(nlogn)
 
 TIME COMPLEXITY(worst case) = O(n^2)
 
+![image](https://github.com/Aayushgupta218/Algorithms-and-complexities/assets/121601377/5e7e7cd5-15df-4e7b-af22-784dee2de87c)
+
 For iterative approach -->
 
 The process includes doing partition and putting the larger list in the stack and sorting the smaller list.This algorithm saves a lot of space.
