@@ -1,0 +1,70 @@
+// based on duration
+
+#include<iostream>
+#include<chrono>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+using namespace std::chrono;
+
+struct lectures {
+    int start_time;
+    int end_time;
+};
+
+bool compare_duration(lectures &l1, lectures &l2) {
+    return (l1.end_time - l1.start_time) < (l2.end_time - l2.start_time);
+}
+
+int selection(lectures *lec, int n) {
+    if (n == 0) {
+        return 0;
+    }
+
+    sort(lec, lec + n, compare_duration);
+    int i = 0, j;
+    int solution = 1;
+    for (j = 1; j < n; j++) {
+        if (lec[i].end_time < lec[j].start_time) {
+            solution++;
+            i = j;
+        }
+    }
+    return solution;
+}
+
+lectures* generate_items(int n) {
+    lectures* lect = new lectures[n];
+    for (int j = 0; j < n; j++) {
+        lect[j].start_time = rand() % 24; 
+        int max_duration = min(24, 24 - lect[j].start_time);
+        if (max_duration > 0) {
+            lect[j].end_time = (lect[j].start_time + rand() % max_duration) % 24 + 1;
+        } else {
+            lect[j].end_time = lect[j].start_time + 1;
+        }
+    }
+    return lect;
+}
+
+int main() {
+    for (int i = 10000; i <= 50000; i += 2000) {
+        lectures* lect = generate_items(i);
+
+        auto start = high_resolution_clock::now();
+
+        for (int m = 1; m <= 10; m++) {
+            selection(lect, i);
+        }
+
+        auto stop = high_resolution_clock::now();
+        int max_lectures = selection(lect, i);
+        auto duration = duration_cast<nanoseconds>(stop - start) / 10;
+
+        cout << "(" << i << "," << "\t" << duration.count() << ")," << endl;
+
+        delete[] lect;
+    }
+
+    return 0;
+}
