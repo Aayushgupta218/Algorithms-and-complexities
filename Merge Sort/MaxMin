@@ -1,0 +1,58 @@
+#include<iostream>
+#include<chrono>
+#include<cstdlib>
+#include<cmath>
+using namespace std;
+using namespace std::chrono;
+
+void MaxMin(int arr[], int l, int h, int& max, int& min) {
+    if (l == h) {
+        max = min = arr[l];
+    } else if (l == h + 1) {
+        max = std::max(arr[l], arr[h]);
+        min = std::min(arr[l], arr[h]);
+    } else {
+        int mid = (l + h) / 2;
+        int max1, min1;
+        MaxMin(arr, l, mid, max1, min1);
+        MaxMin(arr, mid + 1, h, max1, min1);
+
+        if (max < max1) {
+            max = max1;
+        }
+        if (min > min1) {
+            min = min1;
+        }
+    }
+}
+
+int* generate_numbers(int g) {
+    int *arr = new int[g];
+    for (int j = 0; j < g; j++) {
+        arr[j] = rand();
+    }
+    return arr;
+}
+
+int main() {
+    for (int i = 100000; i <= 200000; i += 10000) {
+        int *arr = generate_numbers(i);
+
+        auto start = high_resolution_clock::now();
+
+        for (int m = 1; m <= 10; m++) {
+            int max, min;
+            MaxMin(arr, 0, i - 1, max, min);
+        }
+
+        auto stop = high_resolution_clock::now();
+
+        auto duration = duration_cast<nanoseconds>(stop - start) / 10;
+
+        cout << "(" << i << "," << "\t" << duration.count() << ")," << endl;
+
+        delete[] arr;
+    }
+
+    return 0;
+}
