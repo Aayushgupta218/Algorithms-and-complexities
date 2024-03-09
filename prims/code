@@ -1,0 +1,74 @@
+#include <iostream>
+#include <climits>
+using namespace std;
+
+void MST_Prim(int n, int** cost) {
+
+    int parent[n];
+    int key[n];
+    bool mstSet[n];
+
+    for (int i = 0; i < n; i++) {
+        key[i] = INT_MAX;
+        mstSet[i] = false;
+    }
+
+    key[0] = 0;
+    parent[0] = -1;
+
+    for (int count = 0; count < n - 1; count++) {
+        int minKey = INT_MAX, u = -1;
+
+        for (int v = 0; v < n; v++) {
+            if (!mstSet[v] && key[v] < minKey) {
+                minKey = key[v];
+                u = v;
+            }
+        }
+
+        mstSet[u] = true;
+
+        for (int v = 0; v < n; v++) {
+            if (cost[u][v] && !mstSet[v] && cost[u][v] < key[v]) {
+                parent[v] = u;
+                key[v] = cost[u][v];
+            }
+        }
+    }
+
+    cout << "Edges of Minimum Spanning Tree using Prim's algorithm:\n";
+    for (int i = 1; i < n; i++) {
+        cout << "Edge: " << parent[i] << " - " << i << "   Weight: " << cost[parent[i]][i] << "\n";
+    }
+}
+
+int main() {
+    int n = 6;
+    int** cost = new int*[n];
+
+    for (int i = 0; i < n; ++i) {
+        cost[i] = new int[n];
+
+        for (int j = 0; j < n; ++j) {
+            cost[i][j] = (i == j) ? 0 : INT_MAX;
+        }
+    }
+
+    cost[0][1] = 2;
+    cost[0][2] = 4;
+    cost[1][2] = 1;
+    cost[1][3] = 7;
+    cost[2][4] = 3;
+    cost[3][5] = 1;
+    cost[4][3] = 2;
+    cost[4][5] = 5;
+
+    MST_Prim(n, cost);
+
+    for (int i = 0; i < n; ++i) {
+        delete[] cost[i];
+    }
+    delete[] cost;
+
+    return 0;
+}
