@@ -1,0 +1,36 @@
+# Shortest Path Finding Algorithm Using Dynamic Programming
+
+This code implements an algorithm to find the shortest path in a directed acyclic graph (DAG) with a specific number of intermediate vertices. The algorithm is based on dynamic programming principles and aims to find the shortest path from a starting vertex to an ending vertex while passing through a specified number of intermediate vertices.
+
+Algorithm Overview:
+
+Input:
+cost: A 2D array representing the cost of edges between vertices. cost[i][j] represents the cost of traveling from vertex i to vertex j.
+n: Total number of vertices in the graph.
+k: Number of intermediate vertices to be included in the path.
+fcost: An array to store the cost of reaching each vertex from the starting vertex.
+d: An array to store the next vertex in the shortest path from each vertex.
+p: An array to store the final path.
+
+Initialization:
+Initialize the cost array with appropriate values. Here, INT_MAX represents infinity, and the diagonal elements are set to 0.
+Set the initial values for fcost and d arrays.
+Dynamic Programming:
+Iterate through the vertices in reverse order, starting from the second last vertex.
+For each vertex, find the minimum cost path to reach the next vertex (r) and update fcost and d accordingly.
+Backtracking:
+Set the first and last vertices in the path (p[0] and p[k-1] respectively).
+For the remaining intermediate vertices, retrieve the next vertex from the d array.
+Output:
+Print the path from the starting vertex to the ending vertex, passing through the specified number of intermediate vertices.
+Memory Management:
+Deallocate memory for dynamically allocated arrays.
+Example:
+
+For instance, consider a graph with 8 vertices and a requirement to find the shortest path with 4 intermediate vertices. The cost of edges between vertices is predefined. The program computes and prints the shortest path passing through the specified intermediate vertices.
+
+Usage:
+
+Compile the code using a C++ compiler.
+Run the executable file.
+The program will output the shortest path passing through the specified intermediate vertices.
