@@ -1,0 +1,56 @@
+#include <iostream>
+using namespace std;
+
+void sos(int* wt, int* x, int req_sum, int n, int s, int k, int rem)
+{
+    x[k] = 1;
+    if ((s + wt[k]) == req_sum)
+    {
+        cout << "Solution: ";
+        for (int i = 0; i < n; i++)
+        {
+            cout << x[i] << " ";
+        }
+        cout << "(";
+        for (int i = 0; i < n; i++)
+        {
+            if (x[i] == 1)
+            {
+                cout << wt[i] << " , ";
+            }
+        }
+        cout << ")" << endl;
+    }
+    else if ((k + 1 < n) && (s + wt[k] + wt[k + 1]) <= req_sum)
+    {
+        sos(wt, x, req_sum, n, s + wt[k], k + 1, rem - wt[k]);
+    }
+    if (((s + rem - wt[k]) >= req_sum) && ((k + 1 < n) && (s + wt[k + 1]) <= req_sum))
+    {
+        x[k] = 0;
+        sos(wt, x, req_sum, n, s, k + 1, rem - wt[k]);
+    }
+}
+
+int main()
+{
+    int n, s = 0, rem = 0, req_sum, k;
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    int wt[n], x[n] = {0}; // Initialize x array elements to zero
+    cout << "Enter the sum you want: ";
+    cin >> req_sum;
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << "wt[" << i << "]" << " = ";
+        cin >> wt[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        rem = rem + wt[i];
+    }
+    cout << "Sum = " << rem << endl;
+    sos(wt, x, req_sum, n, 0, 0, rem);
+    return 0;
+}
